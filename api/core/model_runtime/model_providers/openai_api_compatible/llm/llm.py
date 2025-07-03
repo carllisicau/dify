@@ -504,16 +504,9 @@ class OAIAPICompatLargeLanguageModel(_CommonOaiApiCompat, LargeLanguageModel):
 
                     reason_content = delta.get("reasoning_content")
 
-                    if delta_content is None:
-                        if reason_content is None:
-                            continue;
-                        elif reason_content == "":
-                            continue;
-                    elif delta_content == "":
-                        if reason_content is None:
-                            continue;
-                        elif reason_content == "":
-                            continue;
+                    if delta_content is None or delta_content == "":
+                        if reason_content is None or reason_content == "":
+                            continue
                     # 处理思考过程前加think标签
                     if ((delta_content is None or delta_content == "")
                             and reason_content is not None and reason_content != ""):
