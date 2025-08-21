@@ -122,7 +122,7 @@ class OAIAPICompatLargeLanguageModel(_CommonOaiApiCompat, LargeLanguageModel):
                 endpoint_url += "/"
 
             # prepare the payload for a simple ping to the model
-            data = {"model": model, "max_tokens": 5,"enable_thinking": False}
+            data = {"model": model, "max_tokens": 5, "enable_thinking": False}
 
             completion_type = LLMMode.value_of(credentials["mode"])
 
@@ -504,27 +504,20 @@ class OAIAPICompatLargeLanguageModel(_CommonOaiApiCompat, LargeLanguageModel):
 
                     reason_content = delta.get("reasoning_content")
 
-                    if delta_content is None:
-                        if reason_content is None:
-                            continue;
-                        elif reason_content == "":
-                            continue;
-                    elif delta_content == "":
-                        if reason_content is None:
-                            continue;
-                        elif reason_content == "":
-                            continue;
+                    if delta_content is None or delta_content == "":
+                        if reason_content is None or reason_content == "":
+                            continue
                     if delta_content is not None and delta_content != "":
                         if think != -1 and think2 is False:
-                            delta_content = "</think> \n\n"+delta_content
+                            delta_content = "</think> \n\n" + delta_content
                             think2 = True
 
-                    #处理思考过程前加think标签
+                    # 处理思考过程前加think标签
                     if ((delta_content is None or delta_content == "")
                             and reason_content is not None and reason_content != ""):
-                        think = think+1
+                        think = think + 1
                         if think == 0:
-                            delta_content = "<think> "+reason_content;
+                            delta_content = "<think> " + reason_content
                         else:
                             delta_content = reason_content
                     # 处理思考过程后加think标签
